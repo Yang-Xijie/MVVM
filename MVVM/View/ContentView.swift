@@ -9,22 +9,11 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Text("Students")
-            if let students = MySchool.getStudentsWhoseGradeGreaterThanNinty() {
-                VStack {
-                    ScrollView(.vertical) {
-                        ForEach(students, id: \.self) { student in
-                            StudentView(student: .constant(student))
-                        }
-                    }
-                }
-            } else {
-                Text("No students.")
-            }
+            ExcellentStudentsView()
 
             Spacer()
 
-            Button("Show Edit Sheet") {
+            Button("Edit Student Info") {
                 isShowingEditSheet = true
             }
         }
@@ -38,7 +27,7 @@ struct ContentView: View {
     }
 
     private func didDismissSheet() {
-        print("didDismissSheet()")
+        print("[EditSheet] didDismissSheet()")
     }
 }
 
@@ -52,15 +41,18 @@ struct EditSheet: View {
     var body: some View {
         VStack {
             Text("Update student Info")
+                .font(.system(.largeTitle))
+
             HStack {
                 TextField("ID", text: $idToUpdate)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 TextField("New Name", text: $newName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
+            .padding([.horizontal])
 
             Button("Update") {
-                print("Clicked")
+                print("[EditSheet] Update button clicked")
                 updateStudentName()
                 isShowingSelf = false
             }
@@ -74,10 +66,48 @@ struct EditSheet: View {
     }
 }
 
-struct StudentView: View {
-    @Binding var student: School.Student
+struct ExcellentStudentsView: View {
+    @EnvironmentObject var MySchool: SchoolModel
 
     var body: some View {
-        Text(student.description)
+        if let students =
+            MySchool.getStudentsWhoseGradeGreaterThanNinty()
+        // or
+        // MySchool.studentsWhoseGradeGreaterThanNinty
+        {
+            VStack {
+                Text("Excellent Students")
+                    .font(.system(.largeTitle))
+
+                ScrollView(.vertical) {
+                    ForEach(students, id: \.self) { student in
+                        StudentView(student: student)
+                    }
+                }
+            }
+        } else {
+            Text("There are no excellent students.")
+        }
+    }
+}
+
+struct StudentView: View {
+    var student: School.Student
+
+    var body: some View {
+        HStack {
+            Text(student.name)
+                .font(.system(.title))
+
+            Spacer()
+
+            VStack(alignment: .leading) {
+                Text("ID \(student.id)")
+                    .font(.system(.headline))
+                Text("Grade \(String(format: "%.1f", student.grade))")
+                    .font(.system(.body))
+            }
+        }
+        .padding([.horizontal])
     }
 }
