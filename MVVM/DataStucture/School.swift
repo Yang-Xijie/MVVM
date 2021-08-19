@@ -3,15 +3,12 @@
 import Foundation
 
 struct School {
-    // MARK: -
-
-    var students: [Student] = []
-
-    init() {
-        students = testStudents
-    }
-
-    // MARK: -
+    var students: [Student] = [
+        Student(id: 1, name: "aa", grade: 89.5),
+        Student(id: 2, name: "bb", grade: 93),
+        Student(id: 3, name: "cc", grade: 95),
+        Student(id: 4, name: "dd", grade: 84),
+    ]
 
     mutating func updateStudentInfo(id: Int, newName: String) -> Bool {
         if let indexToUpdate = students.firstIndex(where: {
@@ -24,8 +21,6 @@ struct School {
             return false
         }
     }
-
-    // MARK: -
 
     struct Student: Identifiable, Hashable {
         var id: Int
@@ -48,10 +43,3 @@ extension School.Student: CustomStringConvertible {
         return "Student \(self.id), \(self.name), \(self.grade)"
     }
 }
-
-let testStudents: [School.Student] = [
-    School.Student(id: 1, name: "aa", grade: 89.5),
-    School.Student(id: 2, name: "bb", grade: 93),
-    School.Student(id: 3, name: "cc", grade: 95),
-    School.Student(id: 4, name: "dd", grade: 84)
-]
