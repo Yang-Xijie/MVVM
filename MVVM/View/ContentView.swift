@@ -3,7 +3,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var MySchool: SchoolModel
+//    @EnvironmentObject var MySchool: SchoolModel
+
+    @ObservedObject var MySchool = SchoolModel.shared
 
     @State var isShowingEditSheet: Bool = false
 
@@ -14,7 +16,7 @@ struct ContentView: View {
                 VStack {
                     ScrollView(.vertical) {
                         ForEach(students, id: \.self) { student in
-                            StudentView(student: .constant(student))
+                            StudentView(student: student)
                         }
                     }
                 }
@@ -43,7 +45,7 @@ struct ContentView: View {
 }
 
 struct EditSheet: View {
-    @EnvironmentObject var MySchool: SchoolModel
+    @ObservedObject var MySchool = SchoolModel.shared
 
     @Binding var isShowingSelf: Bool
     @State var idToUpdate: String = ""
@@ -75,7 +77,7 @@ struct EditSheet: View {
 }
 
 struct StudentView: View {
-    @Binding var student: School.Student
+    var student: School.Student
 
     var body: some View {
         Text(student.description)

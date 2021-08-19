@@ -1,23 +1,21 @@
 import Foundation
 
 class SchoolModel: ObservableObject {
-    @Published private var model = SchoolModel.newSchool()
+    static var shared = SchoolModel()
 
-    private static func newSchool() -> School {
-        return School()
-    }
+    @Published var school = School()
 
     var wholeStudents: [School.Student] {
-        model.students
+        return school.students
     }
 
     func changeStudentNameById(_ id: Int, newName: String) {
-        _ = model.updateStudentInfo(id: id, newName: newName)
+        _ = SchoolModel.shared.school.updateStudentInfo(id: id, newName: newName)
     }
 
     func getStudentsWhoseGradeGreaterThanNinty() -> [School.Student]? {
         let targetStudents: [School.Student] =
-            model.students.filter {
+            SchoolModel.shared.school.students.filter {
                 $0.grade >= 90
             }
         if targetStudents.count != 0 {
